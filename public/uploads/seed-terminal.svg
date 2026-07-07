@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" role="img" aria-label="Terminal with green tests">
+  <rect width="640" height="360" fill="#0d1117"/>
+  <rect x="24" y="24" width="592" height="312" rx="12" fill="#161b22" stroke="#30363d"/>
+  <g>
+    <circle cx="52" cy="52" r="7" fill="#f4212e"/>
+    <circle cx="76" cy="52" r="7" fill="#ff7a00"/>
+    <circle cx="100" cy="52" r="7" fill="#00ba7c"/>
+  </g>
+  <g font-family="monospace" font-size="16" fill="#c9d1d9">
+    <text x="48" y="108">$ pnpm test</text>
+    <text x="48" y="140" fill="#8b949e">running 42 tests...</text>
+    <text x="48" y="172" fill="#3fb950">  ✓ ranking: never divides by zero</text>
+    <text x="48" y="200" fill="#3fb950">  ✓ posts: parameterized queries</text>
+    <text x="48" y="228" fill="#3fb950">  ✓ feed: cursor pagination</text>
+    <text x="48" y="264" fill="#3fb950">42 passing</text>
+    <text x="48" y="296" fill="#c9d1d9">$ <tspan fill="#58a6ff">git push</tspan> ▋</text>
+  </g>
+</svg>
