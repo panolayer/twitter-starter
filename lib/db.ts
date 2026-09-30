@@ -24,11 +24,23 @@ const globalForDb = globalThis as unknown as GlobalWithDb;
 function connect(): Db {
   fs.mkdirSync(DATA_DIR, { recursive: true });
   const db = new Database(DB_PATH, { timeout: 10000 });
-  db.pragma('journal_mode = WAL');
+  enableWal(db);
   db.pragma('foreign_keys = ON');
   migrate(db);
   seed(db);
   return db;
+}
+
+function enableWal(db: Db): void {
+  const deadline = Date.now() + 10000;
+  const waitBuffer = new Int32Array(new SharedArrayBuffer(4));
+  while (true) {
+    try { db.pragma('journal_mode = WAL'); return; }
+    catch (error) {
+      if (!(error instanceof Error) || !('code' in error) || error.code !== 'SQLITE_BUSY' || Date.now() >= deadline) throw error;
+      Atomics.wait(waitBuffer, 0, 0, 50);
+    }
+  }
 }
 
 function migrate(db: Db): void {

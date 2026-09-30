@@ -11,7 +11,8 @@
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "check": "pnpm typecheck && pnpm build",
-    "test:seed": "node scripts/check-seed.mjs"
+    "test:seed": "node scripts/check-seed.mjs",
+    "smoke": "node scripts/smoke.mjs"
   },
   "dependencies": {
     "better-sqlite3": "^11.3.0",

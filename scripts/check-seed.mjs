@@ -14,7 +14,10 @@ try {
   const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, esModuleInterop: true } }).outputText.replace('require("better-sqlite3")', `require(${JSON.stringify(require.resolve('better-sqlite3'))})`);
   const worker = join(dir, 'worker.cjs');
   await writeFile(worker, compiled + '\nconst db = exports.getDb(); console.log(JSON.stringify({ users: db.prepare("SELECT COUNT(*) n FROM users").get().n, posts: db.prepare("SELECT COUNT(*) n FROM posts").get().n })); db.close();');
-  const results = await Promise.all(Array.from({ length: 4 }, () => promisify(execFile)(process.execPath, [worker], { env: { ...process.env, CHIRP_DATA_DIR: join(dir, 'data') } })));
-  for (const result of results) assert.deepEqual(JSON.parse(result.stdout), { users: 4, posts: 38 });
+  const results = await Promise.allSettled(Array.from({ length: 4 }, () => promisify(execFile)(process.execPath, [worker], { env: { ...process.env, CHIRP_DATA_DIR: join(dir, 'data') } })));
+  for (const result of results) {
+    assert.equal(result.status, 'fulfilled', result.status === 'rejected' ? String(result.reason) : '');
+    assert.deepEqual(JSON.parse(result.value.stdout), { users: 4, posts: 38 });
+  }
   console.log('PASS: four concurrent connections seed exactly one sample world');
 } finally { await rm(dir, { recursive: true, force: true }); }
