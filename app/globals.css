@@ -667,3 +667,6 @@ button {
 
 .action-btn.bookmark { font-size: 19px; }
 .action-btn.bookmark.active, .action-btn.bookmark:hover { color: var(--brand); }
+
+.share-control { position: relative; }
+.share-fallback { position: absolute; z-index: 20; right: 0; top: 28px; width: 210px; padding: 8px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--text); border-radius: 8px; }

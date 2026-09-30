@@ -8,6 +8,7 @@ import RepostButton from './RepostButton';
 import RelativeTime from './RelativeTime';
 import PostText from './PostText';
 import BookmarkButton from './BookmarkButton';
+import ShareButton from './ShareButton';
 
 interface PostProps {
   post: PostWithAuthor;
@@ -75,6 +76,7 @@ export default function Post({ post, onDeleted, canDelete, onUnbookmarked }: Pos
             <span className="action-count">{post.replyCount}</span>
           </span>
           <BookmarkButton postId={post.id} initialSaved={post.bookmarkedByViewer} onRemoved={onUnbookmarked} />
+          <ShareButton postId={post.id} />
           {typeof post.score === 'number' ? (
             <span className="post-score" title="Ranking score">
               score {post.score.toFixed(3)}
