@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { PostWithAuthor, Viewer } from '@/lib/types';
 import { MAX_POST_LENGTH } from '@/lib/validation';
 import Avatar from './Avatar';
@@ -18,6 +18,20 @@ export default function ComposeBox({ viewer, onPosted }: ComposeBoxProps) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const [draftReady, setDraftReady] = useState(false);
+  const draftKey = `chirp:draft:${viewer.id}`;
+  useEffect(() => {
+    try { setText(localStorage.getItem(draftKey) ?? ''); } catch {}
+    setDraftReady(true);
+  }, [draftKey]);
+  useEffect(() => {
+    if (!draftReady) return;
+    try {
+      if (text) localStorage.setItem(draftKey, text);
+      else localStorage.removeItem(draftKey);
+    } catch {}
+  }, [text, draftKey, draftReady]);
 
   const remaining = MAX_POST_LENGTH - text.length;
   const overLimit = remaining < 0;

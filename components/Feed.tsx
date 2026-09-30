@@ -122,7 +122,7 @@ export default function Feed({ initialViewer, initialPage }: FeedProps) {
         <FeedTabs active={algo} onChange={changeTab} />
       </header>
 
-      {viewer ? <ComposeBox viewer={viewer} onPosted={handlePosted} /> : null}
+      {viewer ? <ComposeBox key={viewer.id} viewer={viewer} onPosted={handlePosted} /> : null}
 
       {loading && items.length === 0 ? (
         <p className="feed-empty">Loading…</p>
