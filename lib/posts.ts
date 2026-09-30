@@ -80,7 +80,7 @@ export interface ListPostsOptions {
  */
 export function listPosts(opts: ListPostsOptions): PostWithAuthor[] {
   const db = getDb();
-  const limit = Math.min(Math.max(opts.limit ?? 20, 1), 100);
+  const limit = Math.min(Math.max(opts.limit ?? 20, 1), 300);
 
   const clauses: string[] = [];
   const params: Record<string, unknown> = {

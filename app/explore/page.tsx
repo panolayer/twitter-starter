@@ -16,7 +16,7 @@ export default function ExplorePage({ searchParams }: { searchParams: { q?: stri
   let posts: PostWithAuthor[] = [];
   let error = input.error;
   if (query) {
-    try { posts = searchPosts(query); }
+    try { posts = searchPosts(query, viewer.id); }
     catch { error = 'Could not search these terms. Try another phrase.'; }
   }
   return <>

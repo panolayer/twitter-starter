@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface LikeButtonProps {
   postId: number;
@@ -12,6 +12,8 @@ export default function LikeButton({ postId, initialLiked, initialCount }: LikeB
   const [liked, setLiked] = useState(initialLiked);
   const [count, setCount] = useState(initialCount);
   const [pending, setPending] = useState(false);
+
+  useEffect(() => { if (!pending) { setLiked(initialLiked); setCount(initialCount); } }, [initialLiked, initialCount]);
 
   async function toggle() {
     if (pending) return;

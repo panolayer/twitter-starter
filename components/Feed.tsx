@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import type { FeedAlgo, FeedPage, PostWithAuthor, Viewer } from '@/lib/types';
 import ComposeBox from './ComposeBox';
 import FeedTabs from './FeedTabs';
@@ -26,6 +27,8 @@ export default function Feed({ initialViewer, initialPage }: FeedProps) {
   const [hasMore, setHasMore] = useState(initialPage?.hasMore ?? false);
   const [loading, setLoading] = useState(!initialPage);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [error, setError] = useState('');
+  const router = useRouter();
 
   // Track the latest request so out-of-order poll responses can't clobber a
   // newer tab/viewer selection.
@@ -35,15 +38,18 @@ export default function Feed({ initialViewer, initialPage }: FeedProps) {
     async (nextAlgo: FeedAlgo) => {
       const seq = ++requestSeq.current;
       setLoading(true);
+      setError('');
       try {
         const res = await fetch(`/api/feed?algo=${nextAlgo}`, { cache: 'no-store' });
-        if (!res.ok) return;
+        if (!res.ok) throw new Error('Feed unavailable');
         const page = (await res.json()) as FeedPage & { viewer: Viewer };
         if (seq !== requestSeq.current) return; // superseded
         setItems(page.items);
         setNextCursor(page.nextCursor);
         setHasMore(page.hasMore);
         if (page.viewer) setViewer(page.viewer);
+      } catch {
+        if (seq === requestSeq.current) setError('Could not refresh the feed. Try again.');
       } finally {
         if (seq === requestSeq.current) setLoading(false);
       }
@@ -83,16 +89,21 @@ export default function Feed({ initialViewer, initialPage }: FeedProps) {
   async function loadMore() {
     if (!hasMore || !nextCursor || loadingMore) return;
     setLoadingMore(true);
+    const seq = requestSeq.current;
+    setError('');
     try {
       const res = await fetch(
         `/api/feed?algo=${algo}&cursor=${encodeURIComponent(nextCursor)}`,
         { cache: 'no-store' },
       );
-      if (!res.ok) return;
+      if (!res.ok) throw new Error('Feed unavailable');
       const page = (await res.json()) as FeedPage;
+      if (seq !== requestSeq.current) return;
       setItems((prev) => dedupe([...prev, ...page.items]));
       setNextCursor(page.nextCursor);
       setHasMore(page.hasMore);
+    } catch {
+      if (seq === requestSeq.current) setError('Could not load more chirps. Try again.');
     } finally {
       setLoadingMore(false);
     }
@@ -109,7 +120,9 @@ export default function Feed({ initialViewer, initialPage }: FeedProps) {
 
   function handleSwitch(next: Viewer) {
     setViewer(next);
+    setItems([]);
     void loadFeed(algo);
+    router.refresh();
   }
 
   return (
@@ -124,6 +137,7 @@ export default function Feed({ initialViewer, initialPage }: FeedProps) {
 
       {viewer ? <ComposeBox key={viewer.id} viewer={viewer} onPosted={handlePosted} /> : null}
 
+      {error ? <div className="feed-notice" role="alert">{error} <button type="button" className="text-link" onClick={() => void loadFeed(algo)}>Retry</button></div> : null}
       {loading && items.length === 0 ? (
         <p className="feed-empty">Loading…</p>
       ) : items.length === 0 ? (
@@ -132,7 +146,7 @@ export default function Feed({ initialViewer, initialPage }: FeedProps) {
         <div className="feed-list">
           {items.map((post) => (
             <Post
-              key={post.id}
+              key={`${viewer?.id}:${post.id}`}
               post={post}
               canDelete={post.author.id === viewer?.id}
               onDeleted={handleDeleted}

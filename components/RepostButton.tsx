@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface RepostButtonProps {
   postId: number;
@@ -16,6 +16,8 @@ export default function RepostButton({
   const [reposted, setReposted] = useState(initialReposted);
   const [count, setCount] = useState(initialCount);
   const [pending, setPending] = useState(false);
+
+  useEffect(() => { if (!pending) { setReposted(initialReposted); setCount(initialCount); } }, [initialReposted, initialCount]);
 
   async function toggle() {
     if (pending) return;
