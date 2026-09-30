@@ -61,6 +61,14 @@ function migrate(db: Db): void {
       PRIMARY KEY (post_id, user_id)
     );
 
+    CREATE TABLE IF NOT EXISTS bookmarks (
+      post_id INTEGER NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      created_at TEXT NOT NULL,
+      PRIMARY KEY (post_id, user_id)
+    );
+    CREATE INDEX IF NOT EXISTS idx_bookmarks_user ON bookmarks(user_id, created_at);
+
     CREATE TABLE IF NOT EXISTS reposts (
       post_id    INTEGER NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
       user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,

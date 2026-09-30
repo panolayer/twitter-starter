@@ -53,6 +53,7 @@ export function searchPosts(query: string): PostWithAuthor[] {
       replyCount: row.reply_count,
       likedByViewer: false,
       repostedByViewer: false,
+      bookmarkedByViewer: false,
     };
   });
 

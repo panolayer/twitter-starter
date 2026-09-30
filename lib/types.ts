@@ -33,6 +33,7 @@ export interface PostWithAuthor {
   replyCount: number;
   likedByViewer: boolean;
   repostedByViewer: boolean;
+  bookmarkedByViewer: boolean;
   // Only present for ranked feeds — the score used to order this post.
   score?: number;
 }

@@ -17,6 +17,7 @@ interface PostJoinRow {
   repost_count: number;
   liked_by_viewer: number;
   reposted_by_viewer: number;
+  bookmarked_by_viewer: number;
 }
 
 const SELECT_WITH_AUTHOR = `
@@ -35,7 +36,8 @@ const SELECT_WITH_AUTHOR = `
     (SELECT COUNT(*) FROM likes   l WHERE l.post_id = p.id)                  AS like_count,
     (SELECT COUNT(*) FROM reposts r WHERE r.post_id = p.id)                  AS repost_count,
     (SELECT COUNT(*) FROM likes   l WHERE l.post_id = p.id AND l.user_id = @viewerId) AS liked_by_viewer,
-    (SELECT COUNT(*) FROM reposts r WHERE r.post_id = p.id AND r.user_id = @viewerId) AS reposted_by_viewer
+    (SELECT COUNT(*) FROM reposts r WHERE r.post_id = p.id AND r.user_id = @viewerId) AS reposted_by_viewer,
+    (SELECT COUNT(*) FROM bookmarks b WHERE b.post_id = p.id AND b.user_id = @viewerId) AS bookmarked_by_viewer
   FROM posts p
   JOIN users u ON u.id = p.author_id
 `;
@@ -60,6 +62,7 @@ function mapRow(row: PostJoinRow): PostWithAuthor {
     replyCount: row.reply_count,
     likedByViewer: row.liked_by_viewer > 0,
     repostedByViewer: row.reposted_by_viewer > 0,
+    bookmarkedByViewer: row.bookmarked_by_viewer > 0,
   };
 }
 
