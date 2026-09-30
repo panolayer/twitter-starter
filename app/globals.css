@@ -683,3 +683,14 @@ button {
 .directory-card:hover { background: var(--bg-elev); }
 .directory-card h2 { margin: 0; font-size: 19px; }
 .directory-card p { color: var(--text-muted); font-size: 14px; line-height: 1.6; }
+
+.loading-skeleton { padding: 24px; }
+.skeleton-title, .skeleton-avatar, .skeleton-line { background: var(--bg-hover); border-radius: 8px; animation: breathe 1.4s ease-in-out infinite alternate; }
+.skeleton-title { width: 150px; height: 32px; margin-bottom: 32px; }
+.skeleton-post { display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding: 24px 0; border-bottom: 1px solid var(--border); }
+.skeleton-avatar { height: 44px; border-radius: 50%; }
+.skeleton-line { width: 65%; height: 12px; margin: 8px 0; }
+.skeleton-line.long { width: 100%; }
+.welcome-panel .compose-submit { margin-top: 20px; }
+@keyframes breathe { from { opacity: .4; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
