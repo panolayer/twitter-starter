@@ -5,6 +5,8 @@ import Post from '@/components/Post';
 import { countPostsByAuthor, listPosts } from '@/lib/posts';
 import { getCurrentViewer } from '@/lib/session';
 import ProfileStats from '@/components/ProfileStats';
+import ProfileEditor from '@/components/ProfileEditor';
+import { validateHandle } from '@/lib/validation';
 import { getUserByHandle } from '@/lib/users';
 
 export const dynamic = 'force-dynamic';
@@ -16,7 +18,8 @@ interface ProfilePageProps {
 // Profile page + that user's posts. A server component that reads the data
 // layer directly and renders the (client) Post cards.
 export default function ProfilePage({ params }: ProfilePageProps) {
-  const handle = decodeURIComponent(params.handle).replace(/^@/, '');
+  const handle = validateHandle(params.handle);
+  if (!handle) notFound();
   const user = getUserByHandle(handle);
   if (!user) notFound();
 
@@ -37,6 +40,7 @@ export default function ProfilePage({ params }: ProfilePageProps) {
             <p className="profile-handle">@{user.handle}</p>
             <p className="profile-bio">{user.bio}</p>
             <ProfileStats count={postCount} joinedAt={user.createdAt} />
+            {user.id === viewer.id ? <ProfileEditor user={user} /> : null}
           </div>
         </div>
       </header>

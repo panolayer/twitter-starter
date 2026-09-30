@@ -670,3 +670,10 @@ button {
 
 .share-control { position: relative; }
 .share-fallback { position: absolute; z-index: 20; right: 0; top: 28px; width: 210px; padding: 8px; border: 1px solid var(--border-strong); background: var(--bg); color: var(--text); border-radius: 8px; }
+
+.profile-editor { margin-top: 18px; }
+.profile-editor summary { cursor: pointer; color: var(--brand); font-weight: 700; }
+.profile-editor form { padding-top: 14px; }
+.profile-editor label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 12px; }
+.profile-editor input, .profile-editor textarea { display: block; margin-top: 6px; width: 100%; padding: 10px; border: 1px solid var(--border-strong); border-radius: 10px; color: var(--text); background: var(--bg); font: inherit; }
+.profile-editor p { font-size: 13px; color: var(--text-muted); }
