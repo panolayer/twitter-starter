@@ -77,11 +77,7 @@ export default function Post({ post, onDeleted, canDelete, onUnbookmarked }: Pos
           </span>
           <BookmarkButton postId={post.id} initialSaved={post.bookmarkedByViewer} onRemoved={onUnbookmarked} />
           <ShareButton postId={post.id} />
-          {typeof post.score === 'number' ? (
-            <span className="post-score" title="Ranking score">
-              score {post.score.toFixed(3)}
-            </span>
-          ) : null}
+
         </div>
       </div>
     </article>

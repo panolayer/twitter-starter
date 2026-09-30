@@ -6,8 +6,8 @@
   --text-muted: #536471;
   --border: #eaeef0;
   --border-strong: #cfd9de;
-  --brand: #1d9bf0;
-  --brand-hover: #1a8cd8;
+  --brand: #6d4aff;
+  --brand-hover: #5b38dd;
   --like: #f91880;
   --repost: #00ba7c;
   --danger: #f4212e;
@@ -697,3 +697,21 @@ button {
 
 .feed-notice { background: var(--bg-elev); padding: 12px 16px; font-size: 13px; }
 .feed-notice button { background: none; border: none; font: inherit; cursor: pointer; }
+
+.side-link[aria-current="page"] { color: var(--brand); background: color-mix(in srgb, var(--brand) 8%, var(--bg)); }
+.side-link span:first-child { width: 22px; text-align: center; font-size: 23px; }
+.mobile-nav { display: none; }
+.skip-link { position: fixed; top: -100px; left: 12px; z-index: 100; padding: 12px; background: var(--bg); color: var(--brand); border: 2px solid var(--brand); border-radius: 8px; }
+.skip-link:focus { top: 12px; }
+@media (max-width: 620px) {
+  .main-col { padding-bottom: 80px; }
+  .mobile-nav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; background: var(--bg); border-top: 1px solid var(--border); padding-bottom: env(safe-area-inset-bottom); justify-content: space-around; }
+  .mobile-link { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 4px; font-size: 10px; color: var(--text-muted); }
+  .mobile-link span:first-child { font-size: 24px; }
+  .mobile-link[aria-current="page"] { color: var(--brand); }
+  .post-actions { gap: 14px; }
+  .compose { padding: 14px 12px; gap: 8px; }
+  .compose-footer { flex-wrap: wrap; gap: 10px; }
+  .theme-option { padding: 14px 8px; font-size: 12px; }
+  .profile-hero { flex-direction: column; }
+}

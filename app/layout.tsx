@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import './globals.css';
 import CommunityRail from '@/components/CommunityRail';
+import Navigation from '@/components/Navigation';
+import { getCurrentViewer } from '@/lib/session';
 import { PreferencesProvider } from '@/components/PreferencesProvider';
 
 export const dynamic = 'force-dynamic';
@@ -13,10 +15,12 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const viewer = getCurrentViewer();
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
         <script dangerouslySetInnerHTML={{ __html: `try{const p=JSON.parse(localStorage.getItem('chirp:preferences')||'{}');if(['light','dark','system'].includes(p.theme))document.documentElement.dataset.theme=p.theme;}catch{}` }} />
+        <a href="#main-content" className="skip-link">Skip to content</a>
         <PreferencesProvider>
         <div className="app-shell">
           <aside className="side-nav">
@@ -26,22 +30,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </span>
               <span className="brand-name">Chirp</span>
             </Link>
-            <nav className="side-links">
-              <Link href="/" className="side-link">
-                <span aria-hidden="true">🏠</span> Home
-              </Link>
-              <Link href="/explore" className="side-link"><span aria-hidden="true">⌕</span><span>Explore</span></Link>
-              <Link href="/people" className="side-link"><span aria-hidden="true">♧</span><span>People</span></Link>
-              <Link href="/profile/ada" className="side-link">
-                <span aria-hidden="true">👤</span> Profile
-              </Link>
-              <Link href="/bookmarks" className="side-link"><span aria-hidden="true">▢</span><span>Bookmarks</span></Link>
-              <Link href="/settings" className="side-link"><span aria-hidden="true">⚙</span><span>Settings</span></Link>
-            </nav>
+            <Navigation viewerHandle={viewer.handle} />
             <p className="side-foot">A little space for big ideas.<br />Made for the curious.</p>
           </aside>
 
-          <main className="main-col">{children}</main>
+          <main className="main-col" id="main-content">{children}</main>
+          <Navigation viewerHandle={viewer.handle} mobile />
 
           <aside className="right-rail"><CommunityRail /></aside>
         </div>
