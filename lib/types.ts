@@ -68,9 +68,22 @@ export interface Viewer {
 
 export type ThemeMode = 'system' | 'light' | 'dark';
 export type Locale = 'en' | 'es' | 'ja';
-export interface UserPreferences { theme: ThemeMode; locale: Locale; }
-export interface UploadResponse { url: string; }
-export interface BookmarkState { bookmarked: boolean; }
-export interface BookmarkCollection { viewer: Viewer; items: PostWithAuthor[]; }
+export interface UserPreferences {
+  theme: ThemeMode;
+  locale: Locale;
+}
+export interface UploadResponse {
+  url: string;
+}
+export interface BookmarkState {
+  bookmarked: boolean;
+}
+export interface BookmarkCollection {
+  viewer: Viewer;
+  items: PostWithAuthor[];
+}
 
-export interface ProfileUpdate { displayName: string; bio: string; }
+export interface ProfileUpdate {
+  displayName: string;
+  bio: string;
+}

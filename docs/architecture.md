@@ -25,15 +25,15 @@ localization are pure formatting/computation modules; they do not open a DB.
 
 ## Surfaces and entry points
 
-| Surface | Page | Main collaborators |
-| --- | --- | --- |
-| Home | `app/page.tsx` | Feed, ComposeBox, feed, ranking |
-| Explore | `app/explore/page.tsx` | SearchPanel, search, topics |
-| People | `app/people/page.tsx` | users, Avatar |
-| Profile | `app/profile/[handle]/page.tsx` | users, posts, ProfileEditor, ProfileStats |
-| Saved | `app/bookmarks/page.tsx` | bookmarks, SavedPosts |
-| Permalink | `app/post/[id]/page.tsx` | posts, Post |
-| Settings | `app/settings/page.tsx` | PreferencesProvider, SettingsPanel |
+| Surface   | Page                            | Main collaborators                        |
+| --------- | ------------------------------- | ----------------------------------------- |
+| Home      | `app/page.tsx`                  | Feed, ComposeBox, feed, ranking           |
+| Explore   | `app/explore/page.tsx`          | SearchPanel, search, topics               |
+| People    | `app/people/page.tsx`           | users, Avatar                             |
+| Profile   | `app/profile/[handle]/page.tsx` | users, posts, ProfileEditor, ProfileStats |
+| Saved     | `app/bookmarks/page.tsx`        | bookmarks, SavedPosts                     |
+| Permalink | `app/post/[id]/page.tsx`        | posts, Post                               |
+| Settings  | `app/settings/page.tsx`         | PreferencesProvider, SettingsPanel        |
 
 The root layout supplies navigation, the community rail, and the client preference
 context. It is dynamic because viewer state and community content are local data.

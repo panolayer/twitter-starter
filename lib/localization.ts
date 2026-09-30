@@ -8,6 +8,8 @@ export function formatPostCount(count: number, locale: Locale): string {
   return count.toString() + PROFILE_COPY[locale].posts;
 }
 export function formatJoinedDate(iso: string, locale: Locale): string {
-  const date = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: 'UTC' }).format(new Date(iso));
+  const date = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: 'UTC' }).format(
+    new Date(iso),
+  );
   return `${PROFILE_COPY[locale].joined} ${date}`;
 }

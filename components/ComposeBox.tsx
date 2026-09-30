@@ -22,7 +22,9 @@ export default function ComposeBox({ viewer, onPosted }: ComposeBoxProps) {
   const [draftReady, setDraftReady] = useState(false);
   const draftKey = `chirp:draft:${viewer.id}`;
   useEffect(() => {
-    try { setText(localStorage.getItem(draftKey) ?? ''); } catch {}
+    try {
+      setText(localStorage.getItem(draftKey) ?? '');
+    } catch {}
     setDraftReady(true);
   }, [draftKey]);
   useEffect(() => {
@@ -72,9 +74,9 @@ export default function ComposeBox({ viewer, onPosted }: ComposeBoxProps) {
         body: JSON.stringify({ text: text.trim(), imageUrl }),
       });
       if (!res.ok) {
-        const data = (await res.json().catch(() => null)) as
-          | { error?: { message?: string } }
-          | null;
+        const data = (await res.json().catch(() => null)) as {
+          error?: { message?: string };
+        } | null;
         throw new Error(data?.error?.message ?? 'Could not post.');
       }
       const data = (await res.json()) as { post: PostWithAuthor };
@@ -118,7 +120,11 @@ export default function ComposeBox({ viewer, onPosted }: ComposeBoxProps) {
           </div>
         ) : null}
 
-        {error ? <p className="compose-error" role="alert">{error}</p> : null}
+        {error ? (
+          <p className="compose-error" role="alert">
+            {error}
+          </p>
+        ) : null}
 
         <div className="compose-footer">
           <div className="compose-tools">
@@ -131,17 +137,16 @@ export default function ComposeBox({ viewer, onPosted }: ComposeBoxProps) {
               {uploading ? 'Uploading…' : '🖼 Image'}
             </button>
             <EmojiPicker onSelect={(emoji) => setText((value) => value + emoji)} />
-            <input
-              ref={fileRef}
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={handleFile}
-            />
+            <input ref={fileRef} type="file" accept="image/*" hidden onChange={handleFile} />
           </div>
 
           <div className="compose-actions">
-            <span aria-label={`${remaining} characters remaining`} className={`char-counter ${overLimit ? 'over' : ''}`}>{remaining}</span>
+            <span
+              aria-label={`${remaining} characters remaining`}
+              className={`char-counter ${overLimit ? 'over' : ''}`}
+            >
+              {remaining}
+            </span>
             <button
               type="button"
               className="compose-submit"

@@ -12,7 +12,12 @@ const UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads');
 function extFromName(name: string): string {
   const dot = name.lastIndexOf('.');
   if (dot === -1) return 'bin';
-  return name.slice(dot + 1).toLowerCase().replace(/[^a-z0-9]/g, '') || 'bin';
+  return (
+    name
+      .slice(dot + 1)
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, '') || 'bin'
+  );
 }
 
 export async function POST(request: Request) {

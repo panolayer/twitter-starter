@@ -27,17 +27,13 @@ function mapUser(row: UserRow): User {
 
 export function listUsers(): User[] {
   const db = getDb();
-  const rows = db
-    .prepare('SELECT * FROM users ORDER BY id ASC')
-    .all() as UserRow[];
+  const rows = db.prepare('SELECT * FROM users ORDER BY id ASC').all() as UserRow[];
   return rows.map(mapUser);
 }
 
 export function getUserById(id: number): User | null {
   const db = getDb();
-  const row = db.prepare('SELECT * FROM users WHERE id = @id').get({ id }) as
-    | UserRow
-    | undefined;
+  const row = db.prepare('SELECT * FROM users WHERE id = @id').get({ id }) as UserRow | undefined;
   return row ? mapUser(row) : null;
 }
 
@@ -54,9 +50,9 @@ export function getUserByHandle(handle: string): User | null {
  */
 export function getDefaultViewer(): Viewer {
   const db = getDb();
-  const row = db
-    .prepare('SELECT * FROM users ORDER BY id ASC LIMIT 1')
-    .get() as UserRow | undefined;
+  const row = db.prepare('SELECT * FROM users ORDER BY id ASC LIMIT 1').get() as
+    | UserRow
+    | undefined;
   if (!row) {
     throw new Error('No users seeded — cannot resolve a default viewer.');
   }
@@ -78,7 +74,12 @@ export function toViewer(user: User): Viewer {
   };
 }
 
-export function updateUserProfile(handle: string, input: import('./types').ProfileUpdate): User | null {
-  const result = getDb().prepare('UPDATE users SET display_name = @displayName, bio = @bio WHERE handle = @handle').run({ handle, ...input });
+export function updateUserProfile(
+  handle: string,
+  input: import('./types').ProfileUpdate,
+): User | null {
+  const result = getDb()
+    .prepare('UPDATE users SET display_name = @displayName, bio = @bio WHERE handle = @handle')
+    .run({ handle, ...input });
   return result.changes ? getUserByHandle(handle) : null;
 }

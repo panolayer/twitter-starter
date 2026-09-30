@@ -43,7 +43,9 @@ export default function Post({ post, onDeleted, canDelete, onUnbookmarked }: Pos
           <span className="post-dot" aria-hidden="true">
             ·
           </span>
-          <Link href={`/post/${post.id}`} aria-label="Open chirp"><RelativeTime iso={post.createdAt} /></Link>
+          <Link href={`/post/${post.id}`} aria-label="Open chirp">
+            <RelativeTime iso={post.createdAt} />
+          </Link>
           {canDelete ? (
             <button type="button" className="post-delete" onClick={handleDelete}>
               Delete
@@ -75,9 +77,12 @@ export default function Post({ post, onDeleted, canDelete, onUnbookmarked }: Pos
             </span>
             <span className="action-count">{post.replyCount}</span>
           </span>
-          <BookmarkButton postId={post.id} initialSaved={post.bookmarkedByViewer} onRemoved={onUnbookmarked} />
+          <BookmarkButton
+            postId={post.id}
+            initialSaved={post.bookmarkedByViewer}
+            onRemoved={onUnbookmarked}
+          />
           <ShareButton postId={post.id} />
-
         </div>
       </div>
     </article>

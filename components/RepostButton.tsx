@@ -8,16 +8,17 @@ interface RepostButtonProps {
   initialCount: number;
 }
 
-export default function RepostButton({
-  postId,
-  initialReposted,
-  initialCount,
-}: RepostButtonProps) {
+export default function RepostButton({ postId, initialReposted, initialCount }: RepostButtonProps) {
   const [reposted, setReposted] = useState(initialReposted);
   const [count, setCount] = useState(initialCount);
   const [pending, setPending] = useState(false);
 
-  useEffect(() => { if (!pending) { setReposted(initialReposted); setCount(initialCount); } }, [initialReposted, initialCount]);
+  useEffect(() => {
+    if (!pending) {
+      setReposted(initialReposted);
+      setCount(initialCount);
+    }
+  }, [initialReposted, initialCount]);
 
   async function toggle() {
     if (pending) return;

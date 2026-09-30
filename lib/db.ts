@@ -35,9 +35,17 @@ function enableWal(db: Db): void {
   const deadline = Date.now() + 10000;
   const waitBuffer = new Int32Array(new SharedArrayBuffer(4));
   while (true) {
-    try { db.pragma('journal_mode = WAL'); return; }
-    catch (error) {
-      if (!(error instanceof Error) || !('code' in error) || error.code !== 'SQLITE_BUSY' || Date.now() >= deadline) throw error;
+    try {
+      db.pragma('journal_mode = WAL');
+      return;
+    } catch (error) {
+      if (
+        !(error instanceof Error) ||
+        !('code' in error) ||
+        error.code !== 'SQLITE_BUSY' ||
+        Date.now() >= deadline
+      )
+        throw error;
       Atomics.wait(waitBuffer, 0, 0, 50);
     }
   }
@@ -153,35 +161,101 @@ function seed(db: Db): void {
     }
 
     const posts = [
-      { h: 'ada', t: 'The Analytical Engine weaves algebraic patterns just as the Jacquard loom weaves flowers and leaves. 🧵', img: null, age: 26 * HOUR },
-      { h: 'grace', t: 'It is often easier to ask for forgiveness than to ask for permission. Ship the patch. 🚀', img: null, age: 22 * HOUR },
-      { h: 'linus', t: 'Given enough eyeballs, all bugs are shallow. Send more eyeballs.', img: null, age: 20 * HOUR },
-      { h: 'margaret', t: 'There was no such thing as "software engineering" — so we made it a discipline. Rigor is a feature.', img: '/uploads/seed-apollo.svg', age: 18 * HOUR },
-      { h: 'ada', t: 'A new kind of language: not just numbers, but symbols manipulated by rules. Poetical science. ✨', img: null, age: 14 * HOUR },
-      { h: 'grace', t: 'The most dangerous phrase in the language is "we\'ve always done it this way."', img: null, age: 11 * HOUR },
-      { h: 'linus', t: 'Rewrote the scheduler over the weekend. Regression tests are green. Merged.', img: '/uploads/seed-terminal.svg', age: 9 * HOUR },
-      { h: 'margaret', t: 'Priority displays saved Apollo 11 during descent. Error handling isn\'t optional — it\'s the mission.', img: null, age: 7 * HOUR },
-      { h: 'ada', t: 'Imagination is the discovering faculty, pre-eminently. It is that which penetrates unseen worlds around us.', img: null, age: 5 * HOUR },
-      { h: 'grace', t: 'A ship in port is safe, but that is not what ships are built for. Deploy to prod. ⛵', img: null, age: 3 * HOUR },
-      { h: 'linus', t: 'Reminder: your commit message is documentation someone will read at 3am during an outage. Be kind.', img: null, age: 90 * MIN },
-      { h: 'margaret', t: 'Testing is not about proving you\'re right. It\'s about finding out where you\'re wrong, before your users do.', img: null, age: 35 * MIN },
-      { h: 'ada', t: 'Just prototyped a tiny feed ranker. Time-decay + engagement. Surprisingly fun to tune. 📈', img: null, age: 12 * MIN },
+      {
+        h: 'ada',
+        t: 'The Analytical Engine weaves algebraic patterns just as the Jacquard loom weaves flowers and leaves. 🧵',
+        img: null,
+        age: 26 * HOUR,
+      },
+      {
+        h: 'grace',
+        t: 'It is often easier to ask for forgiveness than to ask for permission. Ship the patch. 🚀',
+        img: null,
+        age: 22 * HOUR,
+      },
+      {
+        h: 'linus',
+        t: 'Given enough eyeballs, all bugs are shallow. Send more eyeballs.',
+        img: null,
+        age: 20 * HOUR,
+      },
+      {
+        h: 'margaret',
+        t: 'There was no such thing as "software engineering" — so we made it a discipline. Rigor is a feature.',
+        img: '/uploads/seed-apollo.svg',
+        age: 18 * HOUR,
+      },
+      {
+        h: 'ada',
+        t: 'A new kind of language: not just numbers, but symbols manipulated by rules. Poetical science. ✨',
+        img: null,
+        age: 14 * HOUR,
+      },
+      {
+        h: 'grace',
+        t: 'The most dangerous phrase in the language is "we\'ve always done it this way."',
+        img: null,
+        age: 11 * HOUR,
+      },
+      {
+        h: 'linus',
+        t: 'Rewrote the scheduler over the weekend. Regression tests are green. Merged.',
+        img: '/uploads/seed-terminal.svg',
+        age: 9 * HOUR,
+      },
+      {
+        h: 'margaret',
+        t: "Priority displays saved Apollo 11 during descent. Error handling isn't optional — it's the mission.",
+        img: null,
+        age: 7 * HOUR,
+      },
+      {
+        h: 'ada',
+        t: 'Imagination is the discovering faculty, pre-eminently. It is that which penetrates unseen worlds around us.',
+        img: null,
+        age: 5 * HOUR,
+      },
+      {
+        h: 'grace',
+        t: 'A ship in port is safe, but that is not what ships are built for. Deploy to prod. ⛵',
+        img: null,
+        age: 3 * HOUR,
+      },
+      {
+        h: 'linus',
+        t: 'Reminder: your commit message is documentation someone will read at 3am during an outage. Be kind.',
+        img: null,
+        age: 90 * MIN,
+      },
+      {
+        h: 'margaret',
+        t: "Testing is not about proving you're right. It's about finding out where you're wrong, before your users do.",
+        img: null,
+        age: 35 * MIN,
+      },
+      {
+        h: 'ada',
+        t: 'Just prototyped a tiny feed ranker. Time-decay + engagement. Surprisingly fun to tune. 📈',
+        img: null,
+        age: 12 * MIN,
+      },
       { h: 'grace', t: 'Nanoseconds add up. So do wasted meetings.', img: null, age: 4 * MIN },
     ];
 
     posts.push(
       ...Array.from({ length: 24 }, (_, i) => ({
         h: ['ada', 'grace', 'linus', 'margaret'][i % 4],
-        t: [
-          'A smaller bundle is a better welcome. Today we removed a dependency. #webdev',
-          'Design detail: an empty state should offer a next step. #design',
-          'Morning walk, coffee, and a notebook full of ideas. #makers',
-          'SQLite transactions make a tiny app feel surprisingly solid. #sqlite',
-          'Readable commit messages are a gift to your future teammates. #opensource',
-          'Shipping something small every day beats a perfect roadmap. #makers',
-          'A good keyboard shortcut makes the interface disappear. #design',
-          'Our new release has fewer loading spinners. That is the feature. #webdev',
-        ][i % 8] + (i >= 8 ? ` Week ${Math.floor(i / 8) + 1} update.` : ''),
+        t:
+          [
+            'A smaller bundle is a better welcome. Today we removed a dependency. #webdev',
+            'Design detail: an empty state should offer a next step. #design',
+            'Morning walk, coffee, and a notebook full of ideas. #makers',
+            'SQLite transactions make a tiny app feel surprisingly solid. #sqlite',
+            'Readable commit messages are a gift to your future teammates. #opensource',
+            'Shipping something small every day beats a perfect roadmap. #makers',
+            'A good keyboard shortcut makes the interface disappear. #design',
+            'Our new release has fewer loading spinners. That is the feature. #webdev',
+          ][i % 8] + (i >= 8 ? ` Week ${Math.floor(i / 8) + 1} update.` : ''),
         img: null,
         age: (30 + i * 3) * HOUR,
       })),

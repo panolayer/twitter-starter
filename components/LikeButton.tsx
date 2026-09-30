@@ -13,7 +13,12 @@ export default function LikeButton({ postId, initialLiked, initialCount }: LikeB
   const [count, setCount] = useState(initialCount);
   const [pending, setPending] = useState(false);
 
-  useEffect(() => { if (!pending) { setLiked(initialLiked); setCount(initialCount); } }, [initialLiked, initialCount]);
+  useEffect(() => {
+    if (!pending) {
+      setLiked(initialLiked);
+      setCount(initialCount);
+    }
+  }, [initialLiked, initialCount]);
 
   async function toggle() {
     if (pending) return;

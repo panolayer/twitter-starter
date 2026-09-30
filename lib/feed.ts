@@ -32,11 +32,7 @@ export function buildFeed(opts: BuildFeedOptions): FeedPage {
 }
 
 // Recent feed: keyset pagination on created_at (stable, no offset drift).
-function buildRecentFeed(
-  viewerId: number,
-  cursor: string | null,
-  limit: number,
-): FeedPage {
+function buildRecentFeed(viewerId: number, cursor: string | null, limit: number): FeedPage {
   const beforeCreatedAt = cursor ?? undefined;
   // Fetch one extra to know whether another page exists.
   const rows = listPosts({ viewerId, beforeCreatedAt, limit: limit + 1 });
@@ -47,11 +43,7 @@ function buildRecentFeed(
 }
 
 // Ranked feed: score a bounded recent pool, sort by score desc, offset-paginate.
-function buildRankedFeed(
-  viewerId: number,
-  cursor: string | null,
-  limit: number,
-): FeedPage {
+function buildRankedFeed(viewerId: number, cursor: string | null, limit: number): FeedPage {
   const offset = parseOffset(cursor);
   const now = Date.now();
 

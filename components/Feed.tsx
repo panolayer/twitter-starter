@@ -21,9 +21,7 @@ export default function Feed({ initialViewer, initialPage }: FeedProps) {
   const [viewer, setViewer] = useState<Viewer | null>(initialViewer ?? null);
   const [algo, setAlgo] = useState<FeedAlgo>(initialPage?.algo ?? DEFAULT_ALGO);
   const [items, setItems] = useState<PostWithAuthor[]>(initialPage?.items ?? []);
-  const [nextCursor, setNextCursor] = useState<string | null>(
-    initialPage?.nextCursor ?? null,
-  );
+  const [nextCursor, setNextCursor] = useState<string | null>(initialPage?.nextCursor ?? null);
   const [hasMore, setHasMore] = useState(initialPage?.hasMore ?? false);
   const [loading, setLoading] = useState(!initialPage);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -34,28 +32,25 @@ export default function Feed({ initialViewer, initialPage }: FeedProps) {
   // newer tab/viewer selection.
   const requestSeq = useRef(0);
 
-  const loadFeed = useCallback(
-    async (nextAlgo: FeedAlgo) => {
-      const seq = ++requestSeq.current;
-      setLoading(true);
-      setError('');
-      try {
-        const res = await fetch(`/api/feed?algo=${nextAlgo}`, { cache: 'no-store' });
-        if (!res.ok) throw new Error('Feed unavailable');
-        const page = (await res.json()) as FeedPage & { viewer: Viewer };
-        if (seq !== requestSeq.current) return; // superseded
-        setItems(page.items);
-        setNextCursor(page.nextCursor);
-        setHasMore(page.hasMore);
-        if (page.viewer) setViewer(page.viewer);
-      } catch {
-        if (seq === requestSeq.current) setError('Could not refresh the feed. Try again.');
-      } finally {
-        if (seq === requestSeq.current) setLoading(false);
-      }
-    },
-    [],
-  );
+  const loadFeed = useCallback(async (nextAlgo: FeedAlgo) => {
+    const seq = ++requestSeq.current;
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch(`/api/feed?algo=${nextAlgo}`, { cache: 'no-store' });
+      if (!res.ok) throw new Error('Feed unavailable');
+      const page = (await res.json()) as FeedPage & { viewer: Viewer };
+      if (seq !== requestSeq.current) return; // superseded
+      setItems(page.items);
+      setNextCursor(page.nextCursor);
+      setHasMore(page.hasMore);
+      if (page.viewer) setViewer(page.viewer);
+    } catch {
+      if (seq === requestSeq.current) setError('Could not refresh the feed. Try again.');
+    } finally {
+      if (seq === requestSeq.current) setLoading(false);
+    }
+  }, []);
 
   // Bootstrap the feed on first mount when no SSR seed was provided.
   useEffect(() => {
@@ -92,10 +87,9 @@ export default function Feed({ initialViewer, initialPage }: FeedProps) {
     const seq = requestSeq.current;
     setError('');
     try {
-      const res = await fetch(
-        `/api/feed?algo=${algo}&cursor=${encodeURIComponent(nextCursor)}`,
-        { cache: 'no-store' },
-      );
+      const res = await fetch(`/api/feed?algo=${algo}&cursor=${encodeURIComponent(nextCursor)}`, {
+        cache: 'no-store',
+      });
       if (!res.ok) throw new Error('Feed unavailable');
       const page = (await res.json()) as FeedPage;
       if (seq !== requestSeq.current) return;
@@ -137,7 +131,14 @@ export default function Feed({ initialViewer, initialPage }: FeedProps) {
 
       {viewer ? <ComposeBox key={viewer.id} viewer={viewer} onPosted={handlePosted} /> : null}
 
-      {error ? <div className="feed-notice" role="alert">{error} <button type="button" className="text-link" onClick={() => void loadFeed(algo)}>Retry</button></div> : null}
+      {error ? (
+        <div className="feed-notice" role="alert">
+          {error}{' '}
+          <button type="button" className="text-link" onClick={() => void loadFeed(algo)}>
+            Retry
+          </button>
+        </div>
+      ) : null}
       {loading && items.length === 0 ? (
         <p className="feed-empty">Loading…</p>
       ) : items.length === 0 ? (
@@ -156,12 +157,7 @@ export default function Feed({ initialViewer, initialPage }: FeedProps) {
       )}
 
       {hasMore ? (
-        <button
-          type="button"
-          className="feed-more"
-          onClick={loadMore}
-          disabled={loadingMore}
-        >
+        <button type="button" className="feed-more" onClick={loadMore} disabled={loadingMore}>
           {loadingMore ? 'Loading…' : 'Show more'}
         </button>
       ) : null}

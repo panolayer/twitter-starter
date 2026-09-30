@@ -12,7 +12,9 @@
     "typecheck": "tsc --noEmit",
     "check": "pnpm typecheck && pnpm build",
     "test:seed": "node scripts/check-seed.mjs",
-    "smoke": "node scripts/smoke.mjs"
+    "smoke": "node scripts/smoke.mjs",
+    "format": "prettier --write app components lib scripts docs README.md AGENTS.md",
+    "format:check": "prettier --check app components lib scripts docs README.md AGENTS.md"
   },
   "dependencies": {
     "better-sqlite3": "^11.3.0",
@@ -25,15 +27,19 @@
     "@types/node": "^20.14.10",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "prettier": "3.5.3",
     "typescript": "^5.5.3"
   },
   "engines": {
-    "node": ">=20 <23"
+    "node": ">=20 <25"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
       "better-sqlite3"
-    ]
+    ],
+    "executionEnv": {
+      "nodeVersion": "20.20.0"
+    }
   },
   "volta": {
     "node": "20.20.0",

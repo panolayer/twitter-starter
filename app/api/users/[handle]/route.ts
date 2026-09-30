@@ -42,13 +42,31 @@ export async function GET(_request: Request, { params }: RouteContext) {
 
 export async function PATCH(request: Request, { params }: RouteContext) {
   const handle = validateHandle(params.handle);
-  if (!handle) return NextResponse.json({ error: { code: 'invalid_handle', message: 'Invalid profile handle.' } }, { status: 400 });
+  if (!handle)
+    return NextResponse.json(
+      { error: { code: 'invalid_handle', message: 'Invalid profile handle.' } },
+      { status: 400 },
+    );
   let body: unknown;
-  try { body = await request.json(); }
-  catch { return NextResponse.json({ error: { code: 'invalid_json', message: 'Body must be valid JSON.' } }, { status: 400 }); }
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json(
+      { error: { code: 'invalid_json', message: 'Body must be valid JSON.' } },
+      { status: 400 },
+    );
+  }
   const input = validateProfileUpdate(body);
-  if (!input.ok || !input.value) return NextResponse.json({ error: { code: 'validation_error', message: input.error ?? 'Invalid profile.' } }, { status: 400 });
+  if (!input.ok || !input.value)
+    return NextResponse.json(
+      { error: { code: 'validation_error', message: input.error ?? 'Invalid profile.' } },
+      { status: 400 },
+    );
   const user = updateUserProfile(handle, input.value);
-  if (!user) return NextResponse.json({ error: { code: 'not_found', message: 'Profile not found.' } }, { status: 404 });
+  if (!user)
+    return NextResponse.json(
+      { error: { code: 'not_found', message: 'Profile not found.' } },
+      { status: 404 },
+    );
   return NextResponse.json(user);
 }

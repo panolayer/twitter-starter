@@ -6,8 +6,8 @@ used to explore architecture, documentation, and change verification in
 
 ## Start in two commands
 
-Use Node.js 20 or 22 and pnpm 10. No accounts, API keys, or external database
-are needed.
+Use Node.js 20 or later and pnpm 10. pnpm selects the pinned Node 20 runtime
+for project scripts. No accounts, API keys, or external database are needed.
 
 ```sh
 pnpm install

@@ -70,9 +70,7 @@ export interface ImageUploadMeta {
  * Validate an uploaded image's content-type and size. Returns a safe file
  * extension on success.
  */
-export function validateImageUpload(
-  file: ImageUploadMeta,
-): ValidationResult<{ ext: string }> {
+export function validateImageUpload(file: ImageUploadMeta): ValidationResult<{ ext: string }> {
   if (!ALLOWED_IMAGE_TYPES.includes(file.contentType as (typeof ALLOWED_IMAGE_TYPES)[number])) {
     return {
       ok: false,
@@ -125,12 +123,20 @@ export function validateHandle(input: string): string | null {
   return /^[a-z][a-z0-9_]{0,29}$/.test(value) ? value : null;
 }
 
-export function validateProfileUpdate(input: unknown): ValidationResult<import('./types').ProfileUpdate> {
-  if (typeof input !== 'object' || input === null) return { ok: false, error: 'Expected a profile object.' };
+export function validateProfileUpdate(
+  input: unknown,
+): ValidationResult<import('./types').ProfileUpdate> {
+  if (typeof input !== 'object' || input === null)
+    return { ok: false, error: 'Expected a profile object.' };
   const body = input as Record<string, unknown>;
-  if (typeof body.displayName !== 'string' || typeof body.bio !== 'string') return { ok: false, error: 'Display name and bio must be strings.' };
+  if (typeof body.displayName !== 'string' || typeof body.bio !== 'string')
+    return { ok: false, error: 'Display name and bio must be strings.' };
   const displayName = body.displayName.trim();
   const bio = body.bio.trim();
-  if (!displayName || displayName.length > 50 || bio.length > 160) return { ok: false, error: 'Use a name of 1–50 characters and a bio of at most 160 characters.' };
+  if (!displayName || displayName.length > 50 || bio.length > 160)
+    return {
+      ok: false,
+      error: 'Use a name of 1–50 characters and a bio of at most 160 characters.',
+    };
   return { ok: true, value: { displayName, bio } };
 }

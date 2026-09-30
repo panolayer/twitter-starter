@@ -16,7 +16,11 @@ export async function GET(request: Request) {
   }
   const viewer = getCurrentViewer();
   try {
-    return NextResponse.json({ query: result.value, viewer, results: result.value ? searchPosts(result.value, viewer.id) : [] });
+    return NextResponse.json({
+      query: result.value,
+      viewer,
+      results: result.value ? searchPosts(result.value, viewer.id) : [],
+    });
   } catch {
     return NextResponse.json(
       { error: { code: 'search_failed', message: 'Could not search these terms.' } },
