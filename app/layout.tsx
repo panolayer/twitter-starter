@@ -28,6 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <span aria-hidden="true">🏠</span> Home
               </Link>
               <Link href="/explore" className="side-link"><span aria-hidden="true">⌕</span><span>Explore</span></Link>
+              <Link href="/people" className="side-link"><span aria-hidden="true">♧</span><span>People</span></Link>
               <Link href="/profile/ada" className="side-link">
                 <span aria-hidden="true">👤</span> Profile
               </Link>

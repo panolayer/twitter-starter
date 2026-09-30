@@ -677,3 +677,9 @@ button {
 .profile-editor label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 12px; }
 .profile-editor input, .profile-editor textarea { display: block; margin-top: 6px; width: 100%; padding: 10px; border: 1px solid var(--border-strong); border-radius: 10px; color: var(--text); background: var(--bg); font: inherit; }
 .profile-editor p { font-size: 13px; color: var(--text-muted); }
+
+.people-directory { padding: 24px; display: grid; gap: 16px; }
+.directory-card { display: flex; gap: 16px; padding: 24px; border: 1px solid var(--border); border-radius: 20px; }
+.directory-card:hover { background: var(--bg-elev); }
+.directory-card h2 { margin: 0; font-size: 19px; }
+.directory-card p { color: var(--text-muted); font-size: 14px; line-height: 1.6; }
