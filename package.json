@@ -2,18 +2,19 @@
   "name": "chirp",
   "version": "1.0.0",
   "private": true,
-  "description": "Chirp — a realistic Twitter/X clone teaching sample (Next.js 14 App Router + SQLite)",
+  "description": "Chirp \u2014 a realistic Twitter/X clone teaching sample (Next.js 14 App Router + SQLite)",
   "packageManager": "pnpm@10.4.1",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "check": "pnpm typecheck && pnpm build"
   },
   "dependencies": {
     "better-sqlite3": "^11.3.0",
-    "next": "14.2.5",
+    "next": "14.2.35",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -23,5 +24,17 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "typescript": "^5.5.3"
+  },
+  "engines": {
+    "node": ">=20 <23"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ]
+  },
+  "volta": {
+    "node": "20.20.0",
+    "pnpm": "10.4.1"
   }
 }
