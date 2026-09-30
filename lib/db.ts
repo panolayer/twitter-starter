@@ -152,19 +152,37 @@ function seed(db: Db): void {
       { h: 'grace', t: 'Nanoseconds add up. So do wasted meetings.', img: null, age: 4 * MIN },
     ];
 
+    posts.push(
+      ...Array.from({ length: 24 }, (_, i) => ({
+        h: ['ada', 'grace', 'linus', 'margaret'][i % 4],
+        t: [
+          'A smaller bundle is a better welcome. Today we removed a dependency. #webdev',
+          'Design detail: an empty state should offer a next step. #design',
+          'Morning walk, coffee, and a notebook full of ideas. #makers',
+          'SQLite transactions make a tiny app feel surprisingly solid. #sqlite',
+          'Readable commit messages are a gift to your future teammates. #opensource',
+          'Shipping something small every day beats a perfect roadmap. #makers',
+          'A good keyboard shortcut makes the interface disappear. #design',
+          'Our new release has fewer loading spinners. That is the feature. #webdev',
+        ][i % 8] + (i >= 8 ? ` Week ${Math.floor(i / 8) + 1} update.` : ''),
+        img: null,
+        age: (30 + i * 3) * HOUR,
+      })),
+    );
+
     const postIds: number[] = [];
     for (const p of posts) {
       const info = insertPost.run({
         authorId: userIds[p.h],
         text: p.t,
         imageUrl: p.img,
-        replyCount: Math.floor(Math.random() * 5),
+        replyCount: postIds.length % 5,
         createdAt: iso(p.age),
       });
       postIds.push(Number(info.lastInsertRowid));
     }
 
-    // Sprinkle deterministic-ish likes/reposts so ranked ≠ recent out of the box.
+    // Seed engagement so ranked and recent differ on the first visit.
     const allUserIds = Object.values(userIds);
     postIds.forEach((postId, idx) => {
       const likers = allUserIds.filter((_, i) => (idx + i) % 2 === 0);
