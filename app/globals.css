@@ -657,3 +657,10 @@ button {
 .theme-option span { font-size: 24px; }
 .settings-panel select { display: block; margin-top: 10px; padding: 12px; border: 1px solid var(--border-strong); border-radius: 12px; color: var(--text); background: var(--bg); font: inherit; width: 100%; }
 .settings-note { padding: 20px; background: var(--bg-elev); border-radius: 16px; }
+
+.compose-tools { display: flex; gap: 8px; align-items: center; }
+.emoji-picker { position: relative; color: var(--brand); font-size: 13px; }
+.emoji-picker summary { cursor: pointer; list-style: none; padding: 8px; border-radius: 999px; }
+.emoji-grid { position: absolute; top: 40px; left: 0; z-index: 20; display: grid; grid-template-columns: repeat(4,1fr); padding: 8px; width: 200px; background: var(--bg); border: 1px solid var(--border-strong); border-radius: 16px; box-shadow: var(--shadow); }
+.emoji-grid button { font-size: 23px; padding: 8px; background: none; border: none; border-radius: 8px; }
+.emoji-grid button:hover { background: var(--bg-hover); }

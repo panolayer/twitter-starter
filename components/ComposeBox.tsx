@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import type { PostWithAuthor, Viewer } from '@/lib/types';
 import { MAX_POST_LENGTH } from '@/lib/validation';
 import Avatar from './Avatar';
+import EmojiPicker from './EmojiPicker';
 
 interface ComposeBoxProps {
   viewer: Viewer;
@@ -108,6 +109,7 @@ export default function ComposeBox({ viewer, onPosted }: ComposeBoxProps) {
             >
               {uploading ? 'Uploading…' : '🖼 Image'}
             </button>
+            <EmojiPicker onSelect={(emoji) => setText((value) => value + emoji)} />
             <input
               ref={fileRef}
               type="file"
