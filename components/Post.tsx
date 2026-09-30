@@ -42,7 +42,7 @@ export default function Post({ post, onDeleted, canDelete, onUnbookmarked }: Pos
           <span className="post-dot" aria-hidden="true">
             ·
           </span>
-          <RelativeTime iso={post.createdAt} />
+          <Link href={`/post/${post.id}`} aria-label="Open chirp"><RelativeTime iso={post.createdAt} /></Link>
           {canDelete ? (
             <button type="button" className="post-delete" onClick={handleDelete}>
               Delete
