@@ -10,7 +10,7 @@ import path from 'node:path';
 // edit. This is the standard "singleton across HMR" pattern.
 // -------------------------------------------------------------------------
 
-const DATA_DIR = path.join(process.cwd(), '.data');
+const DATA_DIR = process.env.CHIRP_DATA_DIR ?? path.join(process.cwd(), '.data');
 const DB_PATH = path.join(DATA_DIR, 'chirp.db');
 
 type Db = Database.Database;
@@ -23,7 +23,7 @@ const globalForDb = globalThis as unknown as GlobalWithDb;
 
 function connect(): Db {
   fs.mkdirSync(DATA_DIR, { recursive: true });
-  const db = new Database(DB_PATH);
+  const db = new Database(DB_PATH, { timeout: 10000 });
   db.pragma('journal_mode = WAL');
   db.pragma('foreign_keys = ON');
   migrate(db);
@@ -80,11 +80,6 @@ function migrate(db: Db): void {
 
 // Seed a small, deterministic world the first time the DB is empty.
 function seed(db: Db): void {
-  const { count } = db.prepare('SELECT COUNT(*) AS count FROM users').get() as {
-    count: number;
-  };
-  if (count > 0) return;
-
   const insertUser = db.prepare(
     `INSERT INTO users (handle, display_name, bio, avatar_color, created_at)
      VALUES (@handle, @displayName, @bio, @avatarColor, @createdAt)`,
@@ -106,6 +101,8 @@ function seed(db: Db): void {
   const HOUR = 60 * MIN;
 
   const seedTx = db.transaction(() => {
+    const { count } = db.prepare('SELECT COUNT(*) AS count FROM users').get() as { count: number };
+    if (count > 0) return;
     const users = [
       {
         handle: 'ada',
@@ -204,7 +201,7 @@ function seed(db: Db): void {
     });
   });
 
-  seedTx();
+  seedTx.immediate();
 }
 
 export function getDb(): Db {

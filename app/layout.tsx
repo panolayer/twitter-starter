@@ -4,6 +4,9 @@ import './globals.css';
 import CommunityRail from '@/components/CommunityRail';
 import { PreferencesProvider } from '@/components/PreferencesProvider';
 
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export const metadata: Metadata = {
   title: 'Chirp',
   description: 'A tiny, realistic Twitter/X clone — Next.js 14 + SQLite.',
