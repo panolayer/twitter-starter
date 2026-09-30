@@ -1,12 +1,3 @@
-// -------------------------------------------------------------------------
-// Input validation helpers used at the API boundary. Pure functions with no
-// I/O so they are trivially unit-testable.
-//
-// NOTE: `validateImageUpload` is exported and correct, but the upload route
-// (app/api/upload/route.ts) deliberately does NOT call it — that is one of the
-// two intentional issues this teaching sample ships. The "fix" is to call it.
-// -------------------------------------------------------------------------
-
 export const MAX_POST_LENGTH = 280;
 export const MAX_UPLOAD_BYTES = 5 * 1024 * 1024; // 5 MB
 export const ALLOWED_IMAGE_TYPES = [
@@ -78,8 +69,6 @@ export interface ImageUploadMeta {
 /**
  * Validate an uploaded image's content-type and size. Returns a safe file
  * extension on success.
- *
- * The upload route intentionally skips calling this (see file header).
  */
 export function validateImageUpload(
   file: ImageUploadMeta,
@@ -117,4 +106,21 @@ export function extForType(contentType: string): string {
     default:
       return 'bin';
   }
+}
+
+export function validateSearchQuery(input: string): ValidationResult<string> {
+  const value = input.trim();
+  if (value.length > 100) return { ok: false, error: 'Search must be 100 characters or fewer.' };
+  return { ok: true, value };
+}
+
+export function validatePositiveId(input: string): number | null {
+  if (!/^[1-9]\d*$/.test(input)) return null;
+  const value = Number(input);
+  return Number.isSafeInteger(value) ? value : null;
+}
+
+export function validateHandle(input: string): string | null {
+  const value = input.replace(/^@/, '').toLowerCase();
+  return /^[a-z][a-z0-9_]{0,29}$/.test(value) ? value : null;
 }

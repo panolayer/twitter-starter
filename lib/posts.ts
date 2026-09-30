@@ -1,12 +1,6 @@
 import { getDb } from './db';
 import type { Post, PostWithAuthor, User } from './types';
 
-// -------------------------------------------------------------------------
-// Data-access for posts. EVERY query here uses parameterized prepared
-// statements — no string concatenation of user input into SQL. (The one
-// deliberate exception lives in app/api/search/route.ts, on purpose.)
-// -------------------------------------------------------------------------
-
 interface PostJoinRow {
   id: number;
   text: string;
