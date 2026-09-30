@@ -40,7 +40,23 @@ architecture and checks changes against rules like these.
    keys, tokens, or `.env` secrets to source control; runtime data lives under
    the gitignored `.data/` and `public/uploads/`.
 
-> ⚠️ This sample deliberately ships two rule violations for teaching purposes:
-> a string-concatenated (SQL-injectable) search in `app/api/search/route.ts`
-> (breaks rule 2) and an unvalidated upload in `app/api/upload/route.ts`
-> (breaks rule 4). Everything else follows the rules above.
+9. **Localize counts and dates as complete messages.** Use locale-aware number,
+   date, and plural formatting. Do not construct translated sentences by
+   concatenating numbers, English suffixes, and translated fragments.
+
+10. **Scope private collections to the current viewer.** Bookmarks are private;
+    read and mutate them only using the viewer resolved by the server session.
+
+11. **Enforce ownership before changing profiles.** A profile update must target
+    the current viewer. A client-supplied handle is not authorization.
+
+## Project map
+
+Chirp is a local social-feed demo for Panolayer. It runs on Node.js with Next.js
+App Router and SQLite. Identity switching is a demo capability, not account
+security. The home feed, Explore, profiles, bookmarks, and preferences form the
+primary product surfaces. Feature contracts live under `docs/features/`.
+
+Use `pnpm install`, `pnpm dev`, `pnpm typecheck`, and `pnpm build`. Runtime files
+belong in ignored directories. Keep changes small enough that their intent is
+clear in Git history. Preserve a runnable checkout after each feature.
