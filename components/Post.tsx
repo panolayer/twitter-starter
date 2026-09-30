@@ -6,6 +6,7 @@ import Avatar from './Avatar';
 import LikeButton from './LikeButton';
 import RepostButton from './RepostButton';
 import RelativeTime from './RelativeTime';
+import PostText from './PostText';
 
 interface PostProps {
   post: PostWithAuthor;
@@ -47,7 +48,7 @@ export default function Post({ post, onDeleted, canDelete }: PostProps) {
           ) : null}
         </div>
 
-        <p className="post-text">{post.text}</p>
+        <PostText text={post.text} />
 
         {post.imageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element

@@ -630,3 +630,6 @@ button {
 .topic-card span, .section-caption { color: var(--text-muted); font-size: 13px; }
 .section-caption { padding: 0 24px; }
 :focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; }
+
+.text-link { color: var(--brand); }
+.text-link:hover { text-decoration: underline; }
