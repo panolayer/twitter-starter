@@ -1,10 +1,12 @@
-'use client';
-
 import Feed from '@/components/Feed';
+import { buildFeed } from '@/lib/feed';
+import { getCurrentViewer } from '@/lib/session';
 
-// Home feed. Client component: <Feed> bootstraps from /api/feed on mount and
-// then polls every ~8s (and on window focus) to stay fresh. Tabs switch
-// between the ranked ("For You") and recent ("Latest") algorithms.
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export default function HomePage() {
-  return <Feed />;
+  const viewer = getCurrentViewer();
+  const page = buildFeed({ algo: 'ranked', viewerId: viewer.id });
+  return <Feed initialViewer={viewer} initialPage={page} />;
 }
