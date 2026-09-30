@@ -6,7 +6,7 @@ used to explore architecture, documentation, and change verification in
 
 ## Start in two commands
 
-Use Node.js 20 or later and pnpm 10. pnpm selects the pinned Node 20 runtime
+Use Node.js 20, 22, or 24 and pnpm 10. pnpm selects the pinned Node 20 runtime
 for project scripts. No accounts, API keys, or external database are needed.
 
 ```sh
@@ -37,7 +37,7 @@ The repository allows its install script through pnpm configuration.
 - Settings: appearance and language preferences.
 
 Read [the architecture](docs/architecture.md), [the API contract](docs/api.md),
-and [feature guides](docs/features/). [AGENTS.md](AGENTS.md) defines the rules
+[development setup](docs/development.md), and [feature guides](docs/features/). [AGENTS.md](AGENTS.md) defines the rules
 Panolayer checks. This is a local verification playground; review its rules and
 implementation before using it as the basis of a public service.
 
