@@ -4,7 +4,7 @@ import Avatar from '@/components/Avatar';
 import Post from '@/components/Post';
 import { countPostsByAuthor, listPosts } from '@/lib/posts';
 import { getCurrentViewer } from '@/lib/session';
-import { relativeTime } from '@/lib/time';
+import ProfileStats from '@/components/ProfileStats';
 import { getUserByHandle } from '@/lib/users';
 
 export const dynamic = 'force-dynamic';
@@ -23,7 +23,6 @@ export default function ProfilePage({ params }: ProfilePageProps) {
   const viewer = getCurrentViewer();
   const posts = listPosts({ viewerId: viewer.id, authorId: user.id, limit: 50 });
   const postCount = countPostsByAuthor(user.id);
-  const joined = relativeTime(user.createdAt);
 
   return (
     <div className="profile">
@@ -37,12 +36,7 @@ export default function ProfilePage({ params }: ProfilePageProps) {
             <h1 className="profile-name">{user.displayName}</h1>
             <p className="profile-handle">@{user.handle}</p>
             <p className="profile-bio">{user.bio}</p>
-            <p className="profile-stats">
-              <span>
-                <strong>{postCount}</strong> chirps
-              </span>
-              <span className="profile-joined">Joined {joined} ago</span>
-            </p>
+            <ProfileStats count={postCount} joinedAt={user.createdAt} />
           </div>
         </div>
       </header>
