@@ -64,3 +64,10 @@ export interface Viewer {
   displayName: string;
   avatarColor: string;
 }
+
+export type ThemeMode = 'system' | 'light' | 'dark';
+export type Locale = 'en' | 'es' | 'ja';
+export interface UserPreferences { theme: ThemeMode; locale: Locale; }
+export interface UploadResponse { url: string; }
+export interface BookmarkState { bookmarked: boolean; }
+export interface BookmarkCollection { viewer: Viewer; items: PostWithAuthor[]; }

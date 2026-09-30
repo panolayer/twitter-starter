@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import './globals.css';
 import CommunityRail from '@/components/CommunityRail';
+import { PreferencesProvider } from '@/components/PreferencesProvider';
 
 export const metadata: Metadata = {
   title: 'Chirp',
@@ -10,8 +11,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
+        <script dangerouslySetInnerHTML={{ __html: `try{const p=JSON.parse(localStorage.getItem('chirp:preferences')||'{}');if(['light','dark','system'].includes(p.theme))document.documentElement.dataset.theme=p.theme;}catch{}` }} />
+        <PreferencesProvider>
         <div className="app-shell">
           <aside className="side-nav">
             <Link href="/" className="brand">
@@ -36,6 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
           <aside className="right-rail"><CommunityRail /></aside>
         </div>
+        </PreferencesProvider>
       </body>
     </html>
   );
