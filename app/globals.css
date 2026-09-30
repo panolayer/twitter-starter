@@ -664,3 +664,6 @@ button {
 .emoji-grid { position: absolute; top: 40px; left: 0; z-index: 20; display: grid; grid-template-columns: repeat(4,1fr); padding: 8px; width: 200px; background: var(--bg); border: 1px solid var(--border-strong); border-radius: 16px; box-shadow: var(--shadow); }
 .emoji-grid button { font-size: 23px; padding: 8px; background: none; border: none; border-radius: 8px; }
 .emoji-grid button:hover { background: var(--bg-hover); }
+
+.action-btn.bookmark { font-size: 19px; }
+.action-btn.bookmark.active, .action-btn.bookmark:hover { color: var(--brand); }

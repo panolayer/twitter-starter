@@ -7,14 +7,16 @@ import LikeButton from './LikeButton';
 import RepostButton from './RepostButton';
 import RelativeTime from './RelativeTime';
 import PostText from './PostText';
+import BookmarkButton from './BookmarkButton';
 
 interface PostProps {
   post: PostWithAuthor;
   onDeleted?: (id: number) => void;
   canDelete?: boolean;
+  onUnbookmarked?: () => void;
 }
 
-export default function Post({ post, onDeleted, canDelete }: PostProps) {
+export default function Post({ post, onDeleted, canDelete, onUnbookmarked }: PostProps) {
   async function handleDelete() {
     if (!canDelete) return;
     if (!confirm('Delete this chirp?')) return;
@@ -72,6 +74,7 @@ export default function Post({ post, onDeleted, canDelete }: PostProps) {
             </span>
             <span className="action-count">{post.replyCount}</span>
           </span>
+          <BookmarkButton postId={post.id} initialSaved={post.bookmarkedByViewer} onRemoved={onUnbookmarked} />
           {typeof post.score === 'number' ? (
             <span className="post-score" title="Ranking score">
               score {post.score.toFixed(3)}
