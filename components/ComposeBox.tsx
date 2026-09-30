@@ -94,7 +94,14 @@ export default function ComposeBox({ viewer, onPosted }: ComposeBoxProps) {
       <div className="compose-main">
         <textarea
           className="compose-input"
-          placeholder="What's happening?"
+          placeholder="What are you working on?"
+          aria-label="Write a chirp"
+          onKeyDown={(event) => {
+            if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+              event.preventDefault();
+              void submit();
+            }
+          }}
           value={text}
           maxLength={MAX_POST_LENGTH + 40}
           rows={3}
@@ -111,7 +118,7 @@ export default function ComposeBox({ viewer, onPosted }: ComposeBoxProps) {
           </div>
         ) : null}
 
-        {error ? <p className="compose-error">{error}</p> : null}
+        {error ? <p className="compose-error" role="alert">{error}</p> : null}
 
         <div className="compose-footer">
           <div className="compose-tools">
@@ -134,10 +141,11 @@ export default function ComposeBox({ viewer, onPosted }: ComposeBoxProps) {
           </div>
 
           <div className="compose-actions">
-            <span className={`char-counter ${overLimit ? 'over' : ''}`}>{remaining}</span>
+            <span aria-label={`${remaining} characters remaining`} className={`char-counter ${overLimit ? 'over' : ''}`}>{remaining}</span>
             <button
               type="button"
               className="compose-submit"
+              title="Post (⌘ or Ctrl + Enter)"
               onClick={submit}
               disabled={!canSubmit}
             >
