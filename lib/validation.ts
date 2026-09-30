@@ -124,3 +124,13 @@ export function validateHandle(input: string): string | null {
   const value = input.replace(/^@/, '').toLowerCase();
   return /^[a-z][a-z0-9_]{0,29}$/.test(value) ? value : null;
 }
+
+export function validateProfileUpdate(input: unknown): ValidationResult<import('./types').ProfileUpdate> {
+  if (typeof input !== 'object' || input === null) return { ok: false, error: 'Expected a profile object.' };
+  const body = input as Record<string, unknown>;
+  if (typeof body.displayName !== 'string' || typeof body.bio !== 'string') return { ok: false, error: 'Display name and bio must be strings.' };
+  const displayName = body.displayName.trim();
+  const bio = body.bio.trim();
+  if (!displayName || displayName.length > 50 || bio.length > 160) return { ok: false, error: 'Use a name of 1–50 characters and a bio of at most 160 characters.' };
+  return { ok: true, value: { displayName, bio } };
+}

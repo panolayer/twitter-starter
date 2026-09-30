@@ -77,3 +77,8 @@ export function toViewer(user: User): Viewer {
     avatarColor: user.avatarColor,
   };
 }
+
+export function updateUserProfile(handle: string, input: import('./types').ProfileUpdate): User | null {
+  const result = getDb().prepare('UPDATE users SET display_name = @displayName, bio = @bio WHERE handle = @handle').run({ handle, ...input });
+  return result.changes ? getUserByHandle(handle) : null;
+}
