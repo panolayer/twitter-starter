@@ -646,3 +646,14 @@ button {
 
 :root[data-theme="dark"] { --bg: #15181c; --bg-elev: #1c2027; --bg-hover: #22272e; --text: #e7e9ea; --text-muted: #9ba8b5; --border: #2a2f36; --border-strong: #38444d; --shadow: 0 8px 24px #0004; color-scheme: dark; }
 :root[data-theme="light"] { color-scheme: light; }
+
+.settings-panel { padding: 24px; }
+.settings-panel fieldset { padding: 0 0 28px; margin: 0 0 28px; border: none; border-bottom: 1px solid var(--border); }
+.settings-panel legend { font-size: 19px; font-weight: 700; }
+.settings-panel p { color: var(--text-muted); line-height: 1.7; }
+.theme-options { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.theme-option { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; border: 1px solid var(--border-strong); border-radius: 14px; padding: 18px 12px; cursor: pointer; font-size: 14px; }
+.theme-option.selected { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 8%, var(--bg)); }
+.theme-option span { font-size: 24px; }
+.settings-panel select { display: block; margin-top: 10px; padding: 12px; border: 1px solid var(--border-strong); border-radius: 12px; color: var(--text); background: var(--bg); font: inherit; width: 100%; }
+.settings-note { padding: 20px; background: var(--bg-elev); border-radius: 16px; }

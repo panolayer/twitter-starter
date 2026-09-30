@@ -31,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/profile/ada" className="side-link">
                 <span aria-hidden="true">👤</span> Profile
               </Link>
+              <Link href="/settings" className="side-link"><span aria-hidden="true">⚙</span><span>Settings</span></Link>
             </nav>
             <p className="side-foot">A little space for big ideas.<br />Made for the curious.</p>
           </aside>
