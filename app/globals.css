@@ -633,3 +633,13 @@ button {
 
 .text-link { color: var(--brand); }
 .text-link:hover { text-decoration: underline; }
+
+.people-list { display: flex; flex-direction: column; gap: 16px; margin-top: 20px; }
+.person-row { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.person-row span { min-width: 0; }
+.person-row small { display: block; color: var(--text-muted); }
+.person-arrow { margin-left: auto; color: var(--brand); }
+.rail-card .eyebrow { font-size: 10px; margin-bottom: 10px; }
+.rail-topic { display: flex; flex-direction: column; gap: 4px; padding: 12px 0; }
+.rail-topic small, .rail-footer { color: var(--text-muted); font-size: 12px; }
+.rail-footer { line-height: 1.8; padding: 0 8px; }

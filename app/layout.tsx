@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import './globals.css';
+import CommunityRail from '@/components/CommunityRail';
 
 export const metadata: Metadata = {
   title: 'Chirp',
@@ -33,26 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
           <main className="main-col">{children}</main>
 
-          <aside className="right-rail">
-            <div className="rail-card">
-              <h2 className="rail-title">About Chirp</h2>
-              <p className="rail-text">
-                Real SQLite backend, HN-style ranked feed, per-user likes &amp; reposts,
-                and image uploads. Built to be mapped and rule-checked by Panolayer.
-              </p>
-            </div>
-            <div className="rail-card">
-              <h2 className="rail-title">Feed algorithms</h2>
-              <ul className="rail-list">
-                <li>
-                  <strong>For You</strong> — engagement × time-decay
-                </li>
-                <li>
-                  <strong>Latest</strong> — newest first
-                </li>
-              </ul>
-            </div>
-          </aside>
+          <aside className="right-rail"><CommunityRail /></aside>
         </div>
       </body>
     </html>
