@@ -4,6 +4,35 @@ These are the project-wide rules any human or AI agent must follow when working
 in this repo. They are intentionally simple and enforceable; Panolayer maps the
 architecture and checks changes against rules like these.
 
+## Required tooling and commands
+
+Use **pnpm 10.4.1**, pinned by `packageManager` in `package.json`, for all
+dependency and project commands. Do not use `npm install`, `npm ci`, `npm run`,
+or Yarn in this repository, and do not add their lockfiles. Keep
+`pnpm-lock.yaml` as the dependency lockfile.
+
+Before starting, check `pnpm --version` (expected: `10.4.1`) and
+`pnpm exec node --version` (expected: `v20.20.0`). If the shell selects an
+incompatible global pnpm or pnpm is missing, use `corepack pnpm` in place of
+`pnpm` for the commands below. Corepack reads the project's version pin. A
+global pnpm 11 can fail under Node 20 before it can select that pinned version;
+do not work around this by switching the project to npm.
+
+| Task                          | Command                           |
+| ----------------------------- | --------------------------------- |
+| Install existing dependencies | `pnpm install --frozen-lockfile`  |
+| Start the development server  | `pnpm dev` (or `pnpm run dev`)    |
+| Typecheck                     | `pnpm typecheck`                  |
+| Build for production          | `pnpm build`                      |
+| Serve the production build    | `pnpm start` (after `pnpm build`) |
+
+Use `pnpm exec <tool>` for local tools so they use the pinned runtime. Do not
+run development and production builds concurrently in the same checkout;
+both write to `.next/`. See [development setup](docs/development.md) for
+additional checks, setup, and recovery instructions.
+
+## Engineering rules
+
 1. **Validate every input at the API boundary.** Route handlers (`app/api/**`)
    must validate and normalize request bodies/params before doing any work.
    Use the helpers in `lib/validation.ts`; never trust client-supplied data.
@@ -57,6 +86,6 @@ App Router and SQLite. Identity switching is a demo capability, not account
 security. The home feed, Explore, profiles, bookmarks, and preferences form the
 primary product surfaces. Feature contracts live under `docs/features/`.
 
-Use `pnpm install`, `pnpm dev`, `pnpm typecheck`, and `pnpm build`. Runtime files
-belong in ignored directories. Keep changes small enough that their intent is
-clear in Git history. Preserve a runnable checkout after each feature.
+Runtime files belong in ignored directories. Keep changes small enough that
+their intent is clear in Git history. Preserve a runnable checkout after each
+feature.
