@@ -11,5 +11,9 @@ hydration to avoid a bright flash. Storage failures use in-memory defaults.
 Language changes the document language and profile count preview; the wider
 interface is currently English.
 
+Settings also offers "Download my chirps", which saves the current demo
+identity's posts through `GET /api/export` as a JSON Lines file. A copy of each
+export stays in `.data/exports/` alongside the database.
+
 Acceptance: changing a preference survives reload, changing identity preserves
 it, and unavailable local storage does not block the app.

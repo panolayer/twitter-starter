@@ -23,10 +23,15 @@ The tables below describe the existing success envelopes.
 | GET `/api/session`               | none                                       | `{ viewer, users }`                            |
 | POST `/api/session`              | `{ userId }`                               | `{ viewer }` and selected-user cookie          |
 | POST `/api/upload`               | multipart `file`                           | 201 `{ url }`                                  |
+| GET `/api/export`                | optional `limit`                           | JSON Lines download of the viewer's chirps     |
 
 PostWithAuthor includes author, counts, viewer-specific like/repost/bookmark
 flags, and an optional ranked score. Clients should display error messages
 without interpreting SQL errors or server internals.
+
+`GET /api/export` downloads the viewer's newest chirps (up to 300), one JSON
+object per line. With `limit`, it keeps only the newest `limit` of them. Each
+export is also saved under `.data/exports/`.
 
 ## Paging
 

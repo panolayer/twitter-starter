@@ -41,6 +41,16 @@ export default function SettingsPanel() {
           <option value="ja">日本語</option>
         </select>
       </fieldset>
+      <fieldset>
+        <legend>Your chirps</legend>
+        <p>
+          Download everything the current demo identity has posted as JSON Lines. A copy is also
+          kept in the local data folder.
+        </p>
+        <a className="text-link" href="/api/export" download>
+          Download my chirps
+        </a>
+      </fieldset>
       <div className="settings-note">
         <strong>Your space, your pace.</strong>
         <p>
