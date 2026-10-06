@@ -44,7 +44,9 @@ pnpm start
 ```
 
 `pnpm test` compiles `tests/` with `tsconfig.test.json` and runs it with the
-built-in `node:test` runner; it needs no server or database. Add a test beside
+built-in `node:test` runner; it needs no server or database. Tests can import
+components and `@/` paths: `scripts/test-aliases.cjs` resolves the alias for
+the compiled output. Add a test beside
 any library change. Stop the development server before `pnpm build`. Development and production
 builds share `.next/`, so use separate checkouts if they need to run at the same
 time. `pnpm start` requires a successful production build first.
