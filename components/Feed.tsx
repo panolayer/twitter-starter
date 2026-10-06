@@ -2,6 +2,17 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import {
+  appendFeedPage,
+  createFeedRequestTracker,
+  emptyFeedState,
+  feedStateFromPage,
+  prependPost,
+  refreshFeedPage,
+  removePost,
+  type FeedRequestTracker,
+  type FeedState,
+} from '@/lib/feed-pages';
 import type { FeedAlgo, FeedPage, PostWithAuthor, Viewer } from '@/lib/types';
 import ComposeBox from './ComposeBox';
 import FeedTabs from './FeedTabs';
@@ -20,41 +31,44 @@ interface FeedProps {
 export default function Feed({ initialViewer, initialPage }: FeedProps) {
   const [viewer, setViewer] = useState<Viewer | null>(initialViewer ?? null);
   const [algo, setAlgo] = useState<FeedAlgo>(initialPage?.algo ?? DEFAULT_ALGO);
-  const [items, setItems] = useState<PostWithAuthor[]>(initialPage?.items ?? []);
-  const [nextCursor, setNextCursor] = useState<string | null>(initialPage?.nextCursor ?? null);
-  const [hasMore, setHasMore] = useState(initialPage?.hasMore ?? false);
+  const [feed, setFeed] = useState<FeedState>(() =>
+    initialPage ? feedStateFromPage(initialPage) : emptyFeedState(),
+  );
   const [loading, setLoading] = useState(!initialPage);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
+  const { items, hasMore, nextCursor } = feed;
 
-  // Track the latest request so out-of-order poll responses can't clobber a
-  // newer tab/viewer selection.
-  const requestSeq = useRef(0);
+  // Orders responses: a tab or viewer change discards older requests, a newer
+  // refresh wins over an older one, and a refresh never discards Show more.
+  const requests = useRef<FeedRequestTracker | null>(null);
+  if (!requests.current) requests.current = createFeedRequestTracker();
 
-  const loadFeed = useCallback(async (nextAlgo: FeedAlgo) => {
-    const seq = ++requestSeq.current;
+  const loadFeed = useCallback(async (nextAlgo: FeedAlgo, kind: 'reset' | 'poll') => {
+    const tracker = requests.current!;
+    const token = tracker.start(kind);
     setLoading(true);
     setError('');
     try {
       const res = await fetch(`/api/feed?algo=${nextAlgo}`, { cache: 'no-store' });
       if (!res.ok) throw new Error('Feed unavailable');
       const page = (await res.json()) as FeedPage & { viewer: Viewer };
-      if (seq !== requestSeq.current) return; // superseded
-      setItems(page.items);
-      setNextCursor(page.nextCursor);
-      setHasMore(page.hasMore);
+      if (!tracker.accepts(token)) return; // superseded
+      setFeed((current) =>
+        kind === 'reset' ? feedStateFromPage(page) : refreshFeedPage(current, page),
+      );
       if (page.viewer) setViewer(page.viewer);
     } catch {
-      if (seq === requestSeq.current) setError('Could not refresh the feed. Try again.');
+      if (tracker.accepts(token)) setError('Could not refresh the feed. Try again.');
     } finally {
-      if (seq === requestSeq.current) setLoading(false);
+      if (tracker.accepts(token)) setLoading(false);
     }
   }, []);
 
   // Bootstrap the feed on first mount when no SSR seed was provided.
   useEffect(() => {
-    if (!initialPage) void loadFeed(DEFAULT_ALGO);
+    if (!initialPage) void loadFeed(DEFAULT_ALGO, 'reset');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -63,7 +77,7 @@ export default function Feed({ initialViewer, initialPage }: FeedProps) {
     let cancelled = false;
     const refresh = () => {
       if (!cancelled && document.visibilityState === 'visible') {
-        void loadFeed(algo);
+        void loadFeed(algo, 'poll');
       }
     };
     const timer = setInterval(refresh, POLL_INTERVAL_MS);
@@ -78,13 +92,14 @@ export default function Feed({ initialViewer, initialPage }: FeedProps) {
   function changeTab(next: FeedAlgo) {
     if (next === algo) return;
     setAlgo(next);
-    void loadFeed(next);
+    void loadFeed(next, 'reset');
   }
 
   async function loadMore() {
     if (!hasMore || !nextCursor || loadingMore) return;
+    const tracker = requests.current!;
+    const token = tracker.start('more');
     setLoadingMore(true);
-    const seq = requestSeq.current;
     setError('');
     try {
       const res = await fetch(`/api/feed?algo=${algo}&cursor=${encodeURIComponent(nextCursor)}`, {
@@ -92,12 +107,10 @@ export default function Feed({ initialViewer, initialPage }: FeedProps) {
       });
       if (!res.ok) throw new Error('Feed unavailable');
       const page = (await res.json()) as FeedPage;
-      if (seq !== requestSeq.current) return;
-      setItems((prev) => dedupe([...prev, ...page.items]));
-      setNextCursor(page.nextCursor);
-      setHasMore(page.hasMore);
+      if (!tracker.accepts(token)) return;
+      setFeed((current) => appendFeedPage(current, page));
     } catch {
-      if (seq === requestSeq.current) setError('Could not load more chirps. Try again.');
+      if (tracker.accepts(token)) setError('Could not load more chirps. Try again.');
     } finally {
       setLoadingMore(false);
     }
@@ -105,17 +118,17 @@ export default function Feed({ initialViewer, initialPage }: FeedProps) {
 
   function handlePosted(post: PostWithAuthor) {
     // New posts always show immediately at the top regardless of algorithm.
-    setItems((prev) => dedupe([post, ...prev]));
+    setFeed((current) => prependPost(current, post));
   }
 
   function handleDeleted(id: number) {
-    setItems((prev) => prev.filter((p) => p.id !== id));
+    setFeed((current) => removePost(current, id));
   }
 
   function handleSwitch(next: Viewer) {
     setViewer(next);
-    setItems([]);
-    void loadFeed(algo);
+    setFeed(emptyFeedState());
+    void loadFeed(algo, 'reset');
     router.refresh();
   }
 
@@ -134,7 +147,7 @@ export default function Feed({ initialViewer, initialPage }: FeedProps) {
       {error ? (
         <div className="feed-notice" role="alert">
           {error}{' '}
-          <button type="button" className="text-link" onClick={() => void loadFeed(algo)}>
+          <button type="button" className="text-link" onClick={() => void loadFeed(algo, 'poll')}>
             Retry
           </button>
         </div>
@@ -163,15 +176,4 @@ export default function Feed({ initialViewer, initialPage }: FeedProps) {
       ) : null}
     </div>
   );
-}
-
-function dedupe(posts: PostWithAuthor[]): PostWithAuthor[] {
-  const seen = new Set<number>();
-  const out: PostWithAuthor[] = [];
-  for (const p of posts) {
-    if (seen.has(p.id)) continue;
-    seen.add(p.id);
-    out.push(p);
-  }
-  return out;
 }
