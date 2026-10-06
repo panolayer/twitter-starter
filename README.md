@@ -6,9 +6,8 @@ used to explore architecture, documentation, and change verification in
 
 ## Start in two commands
 
-**This project uses pnpm 10.4.1**, pinned in `package.json`. Use Node.js 20,
-22, or 24 to launch pnpm; the project's `.npmrc` selects Node 20.20.0 for
-project scripts. No accounts, API keys, or external database are needed.
+**This project uses pnpm 12.9.1**, pinned in `package.json`, on Node.js 24.
+No accounts, API keys, or external database are needed.
 
 ```sh
 pnpm install

@@ -1,0 +1,5 @@
+allowBuilds:
+  better-sqlite3: true
+
+# Never reuse a native build cached for another Node ABI (better-sqlite3).
+sideEffectsCache: false

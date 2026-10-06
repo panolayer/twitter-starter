@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "description": "Chirp \u2014 a realistic Twitter/X clone teaching sample (Next.js 14 App Router + SQLite)",
-  "packageManager": "pnpm@10.4.1",
+  "packageManager": "pnpm@12.9.1",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
-    "test": "tsc -p tsconfig.test.json && node --require ./scripts/test-aliases.cjs --test node_modules/.cache/chirp-test/tests/",
+    "test": "tsc -p tsconfig.test.json && node --require ./scripts/test-aliases.cjs --test '.cache/chirp-test/tests/**/*.test.js'",
     "check": "pnpm typecheck && pnpm build",
     "test:seed": "node scripts/check-seed.mjs",
     "smoke": "node scripts/smoke.mjs",
@@ -32,15 +32,6 @@
     "typescript": "^5.5.3"
   },
   "engines": {
-    "node": ">=20 <25"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "better-sqlite3"
-    ]
-  },
-  "volta": {
-    "node": "20.20.0",
-    "pnpm": "10.4.1"
+    "node": ">=24"
   }
 }

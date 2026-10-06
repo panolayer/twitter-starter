@@ -6,17 +6,16 @@ architecture and checks changes against rules like these.
 
 ## Required tooling and commands
 
-Use **pnpm 10.4.1**, pinned by `packageManager` in `package.json`, for all
+Use **pnpm 12.9.1**, pinned by `packageManager` in `package.json`, for all
 dependency and project commands. Do not use `npm install`, `npm ci`, `npm run`,
 or Yarn in this repository, and do not add their lockfiles. Keep
 `pnpm-lock.yaml` as the dependency lockfile.
 
-Before starting, check `pnpm --version` (expected: `10.4.1`) and
-`pnpm exec node --version` (expected: `v20.20.0`). If the shell selects an
-incompatible global pnpm or pnpm is missing, use `corepack pnpm` in place of
-`pnpm` for the commands below. Corepack reads the project's version pin. A
-global pnpm 11 can fail under Node 20 before it can select that pinned version;
-do not work around this by switching the project to npm.
+Before starting, check `pnpm --version` (expected: `12.9.1`) and
+`node --version` (expected: Node.js 24, e.g. `v24.21.0`). If the shell selects
+an incompatible global pnpm or pnpm is missing, use `corepack pnpm` in place of
+`pnpm` for the commands below. Corepack reads the project's version pin. Do not
+work around a tooling problem by switching the project to npm.
 
 | Task                          | Command                           |
 | ----------------------------- | --------------------------------- |

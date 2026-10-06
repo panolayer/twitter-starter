@@ -3,7 +3,7 @@
 const Module = require('node:module');
 const path = require('node:path');
 
-const compiledRoot = path.join(__dirname, '..', 'node_modules', '.cache', 'chirp-test');
+const compiledRoot = path.join(__dirname, '..', '.cache', 'chirp-test');
 const resolveFilename = Module._resolveFilename;
 
 Module._resolveFilename = function (request, ...rest) {
