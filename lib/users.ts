@@ -83,3 +83,8 @@ export function updateUserProfile(
     .run({ handle, ...input });
   return result.changes ? getUserByHandle(handle) : null;
 }
+
+export function findUserByMention(users: User[], query: string): User | undefined {
+  const wanted = query.trim().replace(/^@/, '').toLowerCase();
+  return users.find((user) => user.handle.toLowerCase() === query);
+}

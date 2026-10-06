@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import SearchPanel from '@/components/SearchPanel';
+import Avatar from '@/components/Avatar';
 import Post from '@/components/Post';
 import { searchPosts } from '@/lib/search';
 import { getCurrentViewer } from '@/lib/session';
 import { TOPICS } from '@/lib/topics';
+import { findUserByMention, listUsers } from '@/lib/users';
 import { validateSearchQuery } from '@/lib/validation';
 import type { PostWithAuthor } from '@/lib/types';
 
@@ -15,6 +17,7 @@ export default function ExplorePage({ searchParams }: { searchParams: { q?: stri
   const viewer = getCurrentViewer();
   let posts: PostWithAuthor[] = [];
   let error = input.error;
+  const person = query ? findUserByMention(listUsers(), query) : undefined;
   if (query) {
     try {
       posts = searchPosts(query, viewer.id);
@@ -35,6 +38,17 @@ export default function ExplorePage({ searchParams }: { searchParams: { q?: stri
         </p>
       ) : query ? (
         <>
+          {person ? (
+            <Link className="directory-card" href={`/profile/${person.handle}`}>
+              <Avatar user={person} size={56} />
+              <div>
+                <h2>{person.displayName}</h2>
+                <span className="post-handle">@{person.handle}</span>
+                <p>{person.bio}</p>
+                <span className="text-link">Visit profile →</span>
+              </div>
+            </Link>
+          ) : null}
           <p className="section-caption">
             {posts.length} results for “{query}”
           </p>
