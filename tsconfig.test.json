@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "incremental": false,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "rootDir": ".",
+    "outDir": "node_modules/.cache/chirp-test",
+    "plugins": []
+  },
+  "include": ["tests/**/*.ts"]
+}

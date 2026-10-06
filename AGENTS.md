@@ -23,6 +23,7 @@ do not work around this by switching the project to npm.
 | Install existing dependencies | `pnpm install --frozen-lockfile`  |
 | Start the development server  | `pnpm dev` (or `pnpm run dev`)    |
 | Typecheck                     | `pnpm typecheck`                  |
+| Run unit tests                | `pnpm test`                       |
 | Build for production          | `pnpm build`                      |
 | Serve the production build    | `pnpm start` (after `pnpm build`) |
 

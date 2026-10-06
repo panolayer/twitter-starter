@@ -37,12 +37,15 @@ the project root. The checked-in SVG illustrations are local assets.
 ```sh
 pnpm format:check
 pnpm typecheck
+pnpm test
 pnpm test:seed
 pnpm build
 pnpm start
 ```
 
-Stop the development server before `pnpm build`. Development and production
+`pnpm test` compiles `tests/` with `tsconfig.test.json` and runs it with the
+built-in `node:test` runner; it needs no server or database. Add a test beside
+any library change. Stop the development server before `pnpm build`. Development and production
 builds share `.next/`, so use separate checkouts if they need to run at the same
 time. `pnpm start` requires a successful production build first.
 

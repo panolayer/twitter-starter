@@ -10,11 +10,12 @@
     "start": "next start",
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
+    "test": "tsc -p tsconfig.test.json && node --test node_modules/.cache/chirp-test/tests/",
     "check": "pnpm typecheck && pnpm build",
     "test:seed": "node scripts/check-seed.mjs",
     "smoke": "node scripts/smoke.mjs",
-    "format": "prettier --write app components lib scripts docs README.md AGENTS.md",
-    "format:check": "prettier --check app components lib scripts docs README.md AGENTS.md"
+    "format": "prettier --write app components lib scripts tests docs README.md AGENTS.md",
+    "format:check": "prettier --check app components lib scripts tests docs README.md AGENTS.md"
   },
   "dependencies": {
     "better-sqlite3": "^11.3.0",
